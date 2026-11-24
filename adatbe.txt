@@ -1,0 +1,86 @@
+1,
+SELECT nev, tipus
+FROM alloviz
+WHERE tipus = 'morotvató';
+2,
+SELECT nev
+FROM alloviz
+WHERE vizgyujto > 100;
+3,
+SELECT AVG(terulet) AS "átlagos terület"
+FROM alloviz
+WHERE tipus = 'bányató';
+4,
+SELECT nev
+FROM telepulesgps
+WHERE id = 382;
+5,
+SELECT nev
+FROM telepulesgps
+WHERE nev LIKE 'S%';
+6,
+SELECT DISTINCT tipus
+FROM alloviz;
+7,
+SELECT telepulesgps.nev
+FROM alloviz
+INNER JOIN helykapcs ON alloviz.id = helykapcs.allovizid
+INNER JOIN telepulesgps ON helykapcs.gpsid = telepulesgps.id
+WHERE alloviz.nev = 'Balaton';
+8,
+SELECT alloviz.nev AS Állóviznév, COUNT(helykapcs.gpsid) AS db
+FROM alloviz
+INNER JOIN helykapcs ON alloviz.id = helykapcs.allovizid
+GROUP BY alloviz.id, alloviz.nev;
+9,
+SELECT alloviz.nev AS Állóviznév, COUNT(helykapcs.gpsid) AS db 
+FROM alloviz
+INNER JOIN helykapcs ON alloviz.id = helykapcs.allovizid
+GROUP BY alloviz.id, alloviz.nev
+ORDER BY db DESC
+FETCH FIRST 1 ROWS ONLY;
+10,
+SELECT nev, tipus, terulet
+FROM alloviz
+WHERE terulet BETWEEN 3 AND 10
+AND  vizgyujto >= terulet * 10;
+11,
+SELECT alloviz.nev AS to_neve, telepulesgps.nev AS telepules_neve
+FROM alloviz
+INNER JOIN helykapcs ON alloviz.id = helykapcs.allovizid
+INNER JOIN telepulesgps ON helykapcs.gpsid = telepulesgps.id
+ORDER BY alloviz.nev ASC;
+12,
+SELECT alloviz.nev, COUNT(helykapcs.gpsid) AS telepulesek_szama 
+FROM alloviz
+INNER JOIN helykapcs ON alloviz.id = helykapcs.allovizid
+GROUP BY alloviz.id, alloviz.nev
+HAVING COUNT(helykapcs.gpsid) >= 3;
+13,
+SELECT alloviz.nev, COUNT(helykapcs.gpsid) AS db 
+FROM alloviz
+INNER JOIN helykapcs ON alloviz.id = helykapcs.allovizid
+WHERE alloviz.tipus = 'morotvató'
+GROUP BY alloviz.id, alloviz.nev
+HAVING COUNT(helykapcs.gpsid) >= 2;
+14,
+SELECT tipus, COUNT(id) AS db
+FROM alloviz
+GROUP BY tipus
+HAVING COUNT(id) >= 4;
+15,
+SELECT alloviz.nev AS alloviz_neve, telepulesgps.nev AS telepules_neve
+FROM alloviz
+LEFT JOIN helykapcs ON alloviz.id = helykapcs.allovizid
+LEFT JOIN telepulesgps ON helykapcs.gpsid = telepulesgps.id;
+16,
+SELECT telepulesgps.nev AS telepules_neve, alloviz.nev AS alloviz_neve
+FROM telepulesgps
+LEFT JOIN helykapcs ON telepulesgps.id = helykapcs.gpsid
+LEFT JOIN alloviz ON helykapcs.allovizid = alloviz.id;
+17,
+SELECT nev, terulet
+FROM alloviz
+WHERE terulet > (SELECT AVG(terulet) FROM alloviz);
+
+
